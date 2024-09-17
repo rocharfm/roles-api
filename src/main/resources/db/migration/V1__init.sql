@@ -24,3 +24,9 @@ insert into role(id, name)
 values ('25bbb7d2-26f3-11ec-9621-0242ac130002', 'Product Owner');
 insert into role(id, name)
 values ('37969e22-26f3-11ec-9621-0242ac130002', 'Tester');
+
+insert into membership(id, team_id, user_id, role_id)
+values ('2777bd3e-6f5b-4fe8-a2d3-d0ae177de78b', '28fe096b3430498f8df6c6c123be11e4', 'd5081655f43e453b80055a2b1327b2e8', '25bbb7d2-26f3-11ec-9621-0242ac130002');
+
+insert into membership(id, team_id, user_id, role_id)
+values ('08ab5ea1-c7cb-4e61-aa70-0fb1b049c270', '2fad2901d63f4b06bd2468c7929b3e7c', 'd5081655f43e453b80055a2b1327b2e8', '25bbb7d2-26f3-11ec-9621-0242ac130002');
