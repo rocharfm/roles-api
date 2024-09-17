@@ -2,6 +2,7 @@ package com.ecore.roles.service.impl;
 
 import com.ecore.roles.exception.ResourceExistsException;
 import com.ecore.roles.exception.ResourceNotFoundException;
+import com.ecore.roles.model.Membership;
 import com.ecore.roles.model.Role;
 import com.ecore.roles.repository.MembershipRepository;
 import com.ecore.roles.repository.RoleRepository;
@@ -57,5 +58,11 @@ public class RolesServiceImpl implements RolesService {
     private Role getDefaultRole() {
         return roleRepository.findByName(DEFAULT_ROLE)
                 .orElseThrow(() -> new IllegalStateException("Default role is not configured"));
+    }
+
+    @Override
+    public Role GetRole(@NonNull UUID uid, @NonNull UUID tid) {
+        return membershipRepository.findByUserIdAndTeamId(uid, tid)
+                .map(Membership::getRole).orElse(getDefaultRole());
     }
 }
