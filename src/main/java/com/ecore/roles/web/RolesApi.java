@@ -11,13 +11,11 @@ public interface RolesApi {
     ResponseEntity<RoleDto> createRole(
             RoleDto role);
 
-    ResponseEntity<List<RoleDto>> getRoles();
+    ResponseEntity<List<RoleDto>> getRoles(
+            UUID userId,
+            UUID teamId);
 
     ResponseEntity<RoleDto> getRole(
             UUID roleId);
-
-    ResponseEntity<RoleDto> getRole(
-            UUID userId,
-            UUID teamId);
 
 }
