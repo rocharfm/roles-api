@@ -1,7 +1,9 @@
 package com.ecore.roles.web.rest;
 
+import com.ecore.roles.exception.InvalidArgumentException;
 import com.ecore.roles.model.Membership;
 import com.ecore.roles.service.MembershipsService;
+import com.ecore.roles.service.TeamsService;
 import com.ecore.roles.web.MembershipsApi;
 import com.ecore.roles.web.dto.MembershipDto;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import static com.ecore.roles.web.dto.MembershipDto.fromModel;
 public class MembershipsRestController implements MembershipsApi {
 
     private final MembershipsService membershipsService;
+    private final TeamsService teamsService;
 
     @Override
     @PostMapping(
@@ -30,13 +33,20 @@ public class MembershipsRestController implements MembershipsApi {
     public ResponseEntity<MembershipDto> assignRoleToMembership(
             @NotNull @Valid @RequestBody MembershipDto membershipDto) {
         Membership membership = membershipsService.assignRoleToMembership(membershipDto.toModel());
+        UUID userId = membership.getUserId();
+        UUID teamId = membership.getTeamId();
+        boolean condition = teamsService.verifyThatUserBelongsToTeam(userId, teamId);
+
+        if (!condition) {
+            throw new InvalidArgumentException(membership.getClass(), "The provided user doesn't belong to the provided team.");
+        }
         return ResponseEntity
                 .status(201)
                 .body(fromModel(membership));
     }
 
     @Override
-    @PostMapping(
+    @GetMapping(
             path = "/search",
             produces = {"application/json"})
     public ResponseEntity<List<MembershipDto>> getMemberships(
