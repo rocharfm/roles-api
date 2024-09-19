@@ -1,5 +1,7 @@
 package com.ecore.roles.web.rest;
 
+import com.ecore.roles.client.model.Team;
+import com.ecore.roles.exception.ResourceNotFoundException;
 import com.ecore.roles.service.TeamsService;
 import com.ecore.roles.web.TeamsApi;
 import com.ecore.roles.web.dto.TeamDto;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,9 +43,13 @@ public class TeamsRestController implements TeamsApi {
             produces = {"application/json"})
     public ResponseEntity<TeamDto> getTeam(
             @PathVariable UUID teamId) {
-        return ResponseEntity
-                .status(200)
-                .body(fromModel(teamsService.getTeam(teamId)));
+        Optional<Team> team = teamsService.getTeam(teamId);
+        if (team.isPresent()) {
+            return ResponseEntity
+                    .status(200)
+                    .body(fromModel(team.get()));
+        }
+        throw new ResourceNotFoundException(Team.class, teamId);
     }
 
 }
