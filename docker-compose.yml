@@ -1,8 +1,38 @@
 version: '3.1'
 
 services:
+  mysql:
+    container_name: roles-api-mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+      ON_CREATE_DB: test
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
   roles-api:
+    container_name: roles-api-service
     build:
       context: .
     ports:
       - '8080:8080'
+    networks:
+      - app-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+networks:
+  app-network:
+    driver: bridge
