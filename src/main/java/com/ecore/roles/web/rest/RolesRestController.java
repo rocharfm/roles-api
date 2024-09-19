@@ -1,6 +1,5 @@
 package com.ecore.roles.web.rest;
 
-import com.ecore.roles.exception.RequiredParameterException;
 import com.ecore.roles.model.Role;
 import com.ecore.roles.service.RolesService;
 import com.ecore.roles.web.RolesApi;
@@ -36,30 +35,30 @@ public class RolesRestController implements RolesApi {
 
     @Override
     @GetMapping(produces = {"application/json"})
-    public ResponseEntity<List<RoleDto>> getRoles(
-            @RequestParam(required = false) UUID userId,
-            @RequestParam(required = false) UUID teamId) {
+    public ResponseEntity<List<RoleDto>> getAllRoles() {
         List<RoleDto> roleDtoList = new ArrayList<>();
 
-        if (userId == null && teamId == null) {
-            List<Role> getRoles = rolesService.GetRoles();
-            for (Role role : getRoles) {
-                RoleDto roleDto = fromModel(role);
-                roleDtoList.add(roleDto);
-            }
-        } else {
-            if (userId == null) {
-                throw new RequiredParameterException("userId");
-            } else if (teamId == null) {
-                throw new RequiredParameterException("teamId");
-            } else {
-                RoleDto roleDto = fromModel(rolesService.GetRole(userId, teamId));
-                roleDtoList.add(roleDto);
-            }
+        List<Role> getRoles = rolesService.GetRoles();
+        for (Role role : getRoles) {
+            RoleDto roleDto = fromModel(role);
+            roleDtoList.add(roleDto);
         }
+
         return ResponseEntity
                 .status(200)
                 .body(roleDtoList);
+    }
+
+    @Override
+    @GetMapping(
+            path = "/search",
+            produces = {"application/json"})
+    public ResponseEntity<RoleDto> searchRole(
+            @RequestParam UUID userId,
+            @RequestParam UUID teamId) {
+        return ResponseEntity
+                .status(200)
+                .body(fromModel(rolesService.GetRole(userId, teamId)));
     }
 
     @Override
