@@ -38,7 +38,8 @@ public class MembershipsRestController implements MembershipsApi {
         boolean condition = teamsService.verifyThatUserBelongsToTeam(userId, teamId);
 
         if (!condition) {
-            throw new InvalidArgumentException(membership.getClass(), "The provided user doesn't belong to the provided team.");
+            throw new InvalidArgumentException(membership.getClass(),
+                    "The provided user doesn't belong to the provided team.");
         }
         return ResponseEntity
                 .status(201)
