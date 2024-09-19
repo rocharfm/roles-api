@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.ecore.roles.service.impl.RolesServiceImpl.DEFAULT_ROLE;
 import static com.ecore.roles.utils.TestData.*;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
