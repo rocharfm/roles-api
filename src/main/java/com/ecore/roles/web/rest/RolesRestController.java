@@ -29,19 +29,16 @@ public class RolesRestController implements RolesApi {
     public ResponseEntity<RoleDto> createRole(
             @Valid @RequestBody RoleDto role) {
         return ResponseEntity
-                .status(200)
+                .status(201)
                 .body(fromModel(rolesService.CreateRole(role.toModel())));
     }
 
     @Override
-    @PostMapping(
-            produces = {"application/json"})
-    public ResponseEntity<List<RoleDto>> getRoles() {
-
-        List<Role> getRoles = rolesService.GetRoles();
-
+    @GetMapping(produces = {"application/json"})
+    public ResponseEntity<List<RoleDto>> getAllRoles() {
         List<RoleDto> roleDtoList = new ArrayList<>();
 
+        List<Role> getRoles = rolesService.GetRoles();
         for (Role role : getRoles) {
             RoleDto roleDto = fromModel(role);
             roleDtoList.add(roleDto);
@@ -53,7 +50,19 @@ public class RolesRestController implements RolesApi {
     }
 
     @Override
-    @PostMapping(
+    @GetMapping(
+            path = "/search",
+            produces = {"application/json"})
+    public ResponseEntity<RoleDto> searchRole(
+            @RequestParam UUID userId,
+            @RequestParam UUID teamId) {
+        return ResponseEntity
+                .status(200)
+                .body(fromModel(rolesService.GetRole(userId, teamId)));
+    }
+
+    @Override
+    @GetMapping(
             path = "/{roleId}",
             produces = {"application/json"})
     public ResponseEntity<RoleDto> getRole(

@@ -1,6 +1,7 @@
 package com.ecore.roles.service;
 
 import com.ecore.roles.exception.ResourceNotFoundException;
+import com.ecore.roles.model.Membership;
 import com.ecore.roles.model.Role;
 import com.ecore.roles.repository.MembershipRepository;
 import com.ecore.roles.repository.RoleRepository;
@@ -13,12 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.ecore.roles.utils.TestData.DEVELOPER_ROLE;
-import static com.ecore.roles.utils.TestData.UUID_1;
+import static com.ecore.roles.utils.TestData.*;
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +68,19 @@ class RolesServiceTest {
                 () -> rolesService.GetRole(UUID_1));
 
         assertEquals(format("Role %s not found", UUID_1), exception.getMessage());
+    }
+
+    @Test
+    public void shouldReturnRoleWhenUsingExistingUserIdAndTeamId() {
+        Membership defaultMembership = DEFAULT_MEMBERSHIP();
+        Role defaultMembershipRole = defaultMembership.getRole();
+
+        when(membershipRepository.findByUserIdAndTeamId(GIANNI_USER_UUID, ORDINARY_CORAL_LYNX_TEAM_UUID))
+                .thenReturn(Optional.of(defaultMembership));
+
+        Role role = rolesService.GetRole(GIANNI_USER_UUID, ORDINARY_CORAL_LYNX_TEAM_UUID);
+
+        assertNotNull(role);
+        assertEquals(defaultMembershipRole, role);
     }
 }
