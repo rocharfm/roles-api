@@ -31,9 +31,11 @@ public class Membership {
     private Role role;
 
     @Column(name = "user_id", nullable = false)
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID userId;
 
     @Column(name = "team_id", nullable = false)
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID teamId;
 
 }
