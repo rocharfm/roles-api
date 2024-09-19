@@ -35,7 +35,7 @@ public class RolesRestController implements RolesApi {
     }
 
     @Override
-    @GetMapping
+    @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<RoleDto>> getRoles(
             @RequestParam(required = false) UUID userId,
             @RequestParam(required = false) UUID teamId) {
