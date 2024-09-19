@@ -44,7 +44,7 @@ public class RestAssuredHelper {
                 .then());
     }
 
-    public static EcoreValidatableResponse getRole(UUID roleId) {
+    public static EcoreValidatableResponse searchRole(UUID roleId) {
         return sendRequest(given()
                 .pathParam("roleId", roleId)
                 .when()
@@ -52,12 +52,12 @@ public class RestAssuredHelper {
                 .then());
     }
 
-    public static EcoreValidatableResponse getRole(UUID userId, UUID teamId) {
+    public static EcoreValidatableResponse searchRole(UUID userId, UUID teamId) {
         return sendRequest(given()
                 .queryParam("userId", userId)
                 .queryParam("teamId", teamId)
                 .when()
-                .get("/v1/roles")
+                .get("/v1/roles/search")
                 .then());
     }
 
